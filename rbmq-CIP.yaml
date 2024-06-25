@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vpromq01
+spec:
+  type: ClusterIP
+  selector:
+    app: rbmq-app
+  ports:
+  - port: 15672
+    protocol: TCP
+    targetPort: rbmq-port

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tomcat-app
+  labels:
+    app: tomcat-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tomcat-app
+  template:
+    metadata:
+      labels:
+        app: tomcat-app
+    spec:
+      containers:
+      - name: tomcat-app
+        image: seagullops/vprofileapp:latest
+        ports:
+        - name: tomcat-port
+          containerPort: 8080
+
+      initContainers:
+      - name: init-vprodb
+        image: busybox
+        command: ['sh', '-c', "until nslookup vprodb.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for mydb; sleep 2; done"]
+
+      - name: init-memcached
+        image: busybox
+        command: ['sh', '-c', "until nslookup vprocache01.default.svc.cluster.local; do echo waiting for memcached; sleep 2; done"]

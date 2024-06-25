@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rbmq-app
+  labels:
+    app: rbmq-app
+spec:
+  selector:
+    matchLabels:
+      app: rbmq-app
+  template:
+    metadata:
+      labels:
+        app: rbmq-app
+    spec:
+      containers:
+      - name: rbmq-app
+        image: rabbitmq
+        env:
+        - name: RABBITMQ_DEFAULT_USER
+          value: "guest"
+        - name: RABBITMQ_DEFAULT_PASS
+          valueFrom:
+            secretKeyRef:
+              name: mysecret
+              key: rbmq_password
+        ports:
+        - name: rbmq-port
+          containerPort: 15672

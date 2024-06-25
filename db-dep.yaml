@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vprodb
+  labels:
+    app: vprodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vprodb
+  template:
+    metadata:
+      labels:
+        app: vprodb
+    spec:
+      containers:
+      - name: vprodb 
+        image: seagullops/vprofiledb
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysecret
+              key: db_password
+        
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: ebs-volume
+        
+        ports:
+        - name: vprodb-port
+          containerPort: 3306
+      
+      initContainers:
+      - name: busybox
+        image: busybox:latest
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: ebs-volume
+        args: ["rm", "-rf", "/var/lib/mysql/lost+found"]
+
+      nodeSelector: 
+          zone: us-east-1a
+    
+      volumes:
+        - name: ebs-volume
+          persistentVolumeClaim:
+            claimName: db-ebs-volume-claim
