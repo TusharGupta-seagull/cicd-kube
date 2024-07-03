@@ -6,17 +6,21 @@ Created an end to end ci/cd pipeline using jenkins, sonarqube docker, helm kuber
 ## Prerequisites
 
 ### Jenkins-plugins
-- Sonarqube scanner
-- BuildTimestamp
-- Pipeline Utility Steps
-- Docker
-- Docker pipeline
+1. Sonarqube scanner
+2. BuildTimestamp
+3. Pipeline Utility Steps
+4. Docker
+5. Docker pipeline
 
 ### Tools
-- Helm
-- Maven 3.9
-- JDK 11
-- SonarScanner 4.7 
+1. Helm
+2. Maven 3.9
+3. JDK 11
+4. SonarScanner 4.7 
+
+---
+- Configure webhook for github with jenkins
+- Configure webhook for sonar server with jenkins for quality analysis
 
 ## Flow of Execution
 - EC2 Instance Setup for Jenkins server, Sonarqube server, Kops server.
